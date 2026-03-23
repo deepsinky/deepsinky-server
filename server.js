@@ -1,26 +1,22 @@
-import express from "express";
-import cors from "cors";
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-const API_KEY = process.env.API_KEY;
-
 app.post("/chat", async (req, res) => {
   try {
     const message = req.body.message;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`,
+      "https://openrouter.ai/api/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://deepsinky.github.io",
+          "X-Title": "DeepSINKY"
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: message }] }]
+          model: "openai/gpt-4o-mini",
+          messages: [
+            { role: "user", content: message }
+          ]
         })
       }
     );
@@ -28,15 +24,12 @@ app.post("/chat", async (req, res) => {
     const data = await response.json();
 
     const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+      data?.choices?.[0]?.message?.content || "No response 😢";
 
     res.json({ reply });
 
   } catch (err) {
-    res.json({ reply: "Error" });
+    console.error(err);
+    res.json({ reply: "Server error 😢" });
   }
-});
-
-app.listen(3000, () => {
-  console.log("Server running...");
 });
