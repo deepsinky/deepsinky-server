@@ -1,6 +1,4 @@
-
-    import express from "express";
-
+import express from "express";
 import cors from "cors";
 
 const app = express();
@@ -9,12 +7,12 @@ app.use(cors());
 app.use(express.json());
 
 const API_KEY = process.env.API_KEY;
+
 console.log("API KEY CHECK:", API_KEY ? "OK" : "MISSING");
-console.log("API KEY VALUE:", API_KEY);
 
 // ROOT
 app.get("/", (req, res) => {
-  res.send("Server is running ✅");
+  res.send("DeepSINKY Server is running ✅");
 });
 
 // CHAT
@@ -26,17 +24,13 @@ app.post("/chat", async (req, res) => {
       return res.json({ reply: "No message ❌" });
     }
 
-    console.log("USER MESSAGE:", message);
-
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://deepsinky.github.io",
-          "X-Title": "DeepSINKY"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           model: "openai/gpt-4o-mini",
@@ -50,19 +44,15 @@ app.post("/chat", async (req, res) => {
       }
     );
 
-    console.log("STATUS:", response.status);
-
     const data = await response.json();
-    console.log("FULL DATA:", JSON.stringify(data, null, 2));
 
-    // ✅ FIXED LINE
     let reply = data?.choices?.[0]?.message?.content || "";
 
     if (!reply) {
       if (data?.error) {
         reply = "API Error: " + data.error.message;
       } else {
-        reply = "⚠️ Empty response from AI";
+        reply = "⚠️ No response from AI";
       }
     }
 
@@ -74,9 +64,9 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// LISTEN
+// PORT
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("DeepSINKY AI server running on port " + PORT);
+app.listen(PORT, () => {
+  console.log("DeepSINKY running on port " + PORT);
 });
