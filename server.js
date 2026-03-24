@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import fetch from "node-fetch"; // 👈 जरूरी
 
 const app = express();
 
@@ -29,17 +30,17 @@ app.post("/chat", async (req, res) => {
       {
         method: "POST",
         headers: {
-  "Authorization": `Bearer ${API_KEY}`,
-  "Content-Type": "application/json",
-  "HTTP-Referer": "https://deepsinky.github.io",
-  "X-Title": "DeepSINKY"
-},
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://deepsinky.github.io",
+          "X-Title": "DeepSINKY"
+        },
         body: JSON.stringify({
-  model: "mistralai/mistral-7b-instruct",
-  messages: [
-    {
-      role: "user",
-      content: message
+          model: "openai/gpt-4o-mini", // 👈 BEST MODEL
+          messages: [
+            {
+              role: "user",
+              content: message
             }
           ]
         })
@@ -48,7 +49,10 @@ app.post("/chat", async (req, res) => {
 
     const data = await response.json();
 
-    let reply = data?.choices?.[0]?.message?.content;
+    console.log("FULL DATA:", JSON.stringify(data, null, 2)); // 👈 debug
+
+    let reply = data?.choices?.[0]?.message?.content || "";
+
     if (!reply) {
       if (data?.error) {
         reply = "API Error: " + data.error.message;
