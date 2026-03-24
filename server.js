@@ -33,28 +33,28 @@ app.post("/chat", async (req, res) => {
           "Authorization": `Bearer ${API_KEY}`,
           "Content-Type": "application/json"
         },
-    body: JSON.stringify({
-      model: "llama-3.1-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: `Reply with emojis, headings, bullet points, and bold text.
+        body: JSON.stringify({
+          model: "llama-3.1-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: `Reply with emojis, headings, bullet points, and bold text.
 
 STRICT RULES:
 1. Use emojis
 2. Use bullet points
 3. Use **bold**
 4. Clean formatting`
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ]
-    })
-  }
-);
-  
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ]
+        })
+      }
+    );
+
     console.log("STATUS:", response.status);
 
     const data = await response.json();
