@@ -33,11 +33,11 @@ app.post("/chat", async (req, res) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-         model: "mistralai/mistral-7b-instruct",
-          messages: [
-            {
-              role: "user",
-              content: message
+  model: "mistralai/mistral-7b-instruct",
+  messages: [
+    {
+      role: "user",
+      content: message
             }
           ]
         })
