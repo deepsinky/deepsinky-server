@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import fetch from "node-fetch"; // 👈 जरूरी
 
 const app = express();
 
@@ -8,8 +7,6 @@ app.use(cors());
 app.use(express.json());
 
 const API_KEY = process.env.API_KEY;
-
-console.log("API KEY CHECK:", API_KEY ? "OK" : "MISSING");
 
 // ROOT
 app.get("/", (req, res) => {
@@ -25,50 +22,29 @@ app.post("/chat", async (req, res) => {
       return res.json({ reply: "No message ❌" });
     }
 
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-          "HTTP-Referer": "https://deepsinky.github.io",
-          "X-Title": "DeepSINKY"
-        },
-        body: JSON.stringify({
-          model: "openai/gpt-4o-mini", // 👈 BEST MODEL
-          messages: [
-            {
-              role: "user",
-              content: message
-            }
-          ]
-        })
-      }
-    );
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [
+          { role: "user", content: message }
+        ]
+      })
+    });
 
     const data = await response.json();
-    console.log("OPENROUTER FULL RESPONSE:", JSON.stringify(data, null, 2));
 
-let reply = "";
-
-if (data.choices && data.choices.length > 0) {
-  reply = data.choices[0].message?.content || "";
-}
-
-if (!reply) {
-  if (data.error) {
-    reply = "API Error: " + data.error.message;
-  } else {
-    reply = "⚠️ AI ne blank response diya";
-  }
-}
+    let reply = data?.choices?.[0]?.message?.content || "No response";
 
     res.json({ reply });
 
   } catch (err) {
-    console.error("SERVER ERROR:", err);
-    res.status(500).json({ reply: "Server error 😢" });
+    console.error(err);
+    res.json({ reply: "Server error 😢" });
   }
 });
 
@@ -76,5 +52,5 @@ if (!reply) {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("DeepSINKY running on port " + PORT);
+  console.log("Server running on " + PORT);
 });
