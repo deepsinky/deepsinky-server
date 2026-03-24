@@ -36,9 +36,21 @@ app.post("/chat", async (req, res) => {
         body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           messages: [
-            {
-              role: "user",
-              content: message
+  {
+    role: "system",
+    content: `
+Always reply like this:
+
+🔥 Use headings
+👉 Use emojis
+✔ Use bullet points
+📦 Use code blocks with triple backticks
+Make response clean and structured like ChatGPT
+`
+  },
+  {
+    role: "user",
+    content: message
             }
           ]
         })
