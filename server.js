@@ -34,7 +34,8 @@ const response = await fetch(
       "Content-Type": "application/json"  
     },  
     body: JSON.stringify({  
-      model: "llama-3.1-8b-instant",  
+    model: "llama-3.1-8b-instant",
+
       messages: [
 
 {
