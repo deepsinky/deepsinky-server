@@ -33,25 +33,21 @@ const response = await fetch(
       "Authorization": `Bearer ${API_KEY}`,  
       "Content-Type": "application/json"  
     },  
-body: JSON.stringify({  
-  model: "llama-3.1-70b-versatile",  
-  messages: [  
-    {  
-      role: "system",  
-      content: `Reply with emojis, headings, bullet points, and bold text.
+    body: JSON.stringify({  
+      model: "llama-3.1-8b-instant",  
+      messages: [
 
-STRICT RULES:
+{
+role: "system",
+content: `
+Always reply like this:
 
-1. Use emojis
-
-
-2. Use bullet points
-
-
-3. Use bold
-
-
-4. Clean formatting`
+🔥 Use headings
+👉 Use emojis
+✔ Use bullet points
+📦 Use code blocks with triple backticks
+Make response clean and structured like ChatGPT
+`
 },
 {
 role: "user",
@@ -62,28 +58,26 @@ content: message
 }
 );
 
-console.log("STATUS:", response.status);
+console.log("STATUS:", response.status);  
 
-const data = await response.json();
-console.log("FULL DATA:", JSON.stringify(data, null, 2));
+const data = await response.json();  
+console.log("FULL DATA:", JSON.stringify(data, null, 2));  
 
-let reply = "";
+let reply = "";  
 
-if (data.choices && data.choices.length > 0) {
-reply = data.choices[0].message?.content || "";
-}
+if (data.choices && data.choices.length > 0) {  
+  reply = data.choices[0].message?.content || "";  
+}  
 
-if (!reply) {
-if (data.error) {
-reply = "API Error: " + data.error.message;
-} else {
-reply = "⚠️ AI ne blank response diya";
-}
-}
+if (!reply) {  
+  if (data.error) {  
+    reply = "API Error: " + data.error.message;  
+  } else {  
+    reply = "⚠️ AI ne blank response diya";  
+  }  
+}  
 
 res.json({ reply });
-
-
 
 } catch (err) {
 console.error("SERVER ERROR:", err);
@@ -96,4 +90,4 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
 console.log("DeepSINKY running on port " + PORT);
-});
+}); 
