@@ -48,18 +48,21 @@ app.post("/chat", async (req, res) => {
     );
 
     const data = await response.json();
+    console.log("OPENROUTER FULL RESPONSE:", JSON.stringify(data, null, 2));
 
-    console.log("FULL DATA:", JSON.stringify(data, null, 2)); // 👈 debug
+let reply = "";
 
-    let reply = data?.choices?.[0]?.message?.content || "";
+if (data.choices && data.choices.length > 0) {
+  reply = data.choices[0].message?.content || "";
+}
 
-    if (!reply) {
-      if (data?.error) {
-        reply = "API Error: " + data.error.message;
-      } else {
-        reply = "⚠️ No response from AI";
-      }
-    }
+if (!reply) {
+  if (data.error) {
+    reply = "API Error: " + data.error.message;
+  } else {
+    reply = "⚠️ AI ne blank response diya";
+  }
+}
 
     res.json({ reply });
 
