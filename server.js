@@ -34,23 +34,37 @@ app.post("/chat", async (req, res) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
+          model: "llama-3.1-70b-versatile",
           messages: [
-  {
-    role: "system",
-    content: `
-Always reply like this:
+   {
+  role: "system",
+  content: `
+You are ChatGPT-style assistant.
 
-🔥 Use headings
-👉 Use emojis
-✔ Use bullet points
-📦 Use code blocks with triple backticks
-Make response clean and structured like ChatGPT
+STRICT RULES (must follow):
+
+1. Always use emojis in headings (🔥 👉 ✔ 📦)
+2. Always structure response in sections
+3. Always use bullet points
+4. Important words must be in **bold**
+5. Use line breaks properly (no <br>, use real formatting)
+6. If code is needed, use triple backticks
+7. Never reply in plain paragraph
+
+Example format:
+
+🔥 Title
+
+👉 Point 1  
+👉 Point 2  
+
+✔ Key points:
+- Item 1
+- Item 2
+
+Make response clean, modern and beautiful like ChatGPT.
 `
-  },
-  {
-    role: "user",
-    content: message
+   }         {
             }
           ]
         })
