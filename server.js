@@ -46,8 +46,7 @@ app.post("/chat", async (req, res) => {
 
     const data = await response.json();
 
-    let reply = data?.choices?.[0]?.message?.content || "";
-
+    let reply = data?.choices?.[0]?.message?.content;
     if (!reply) {
       if (data?.error) {
         reply = "API Error: " + data.error.message;
