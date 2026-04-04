@@ -38,6 +38,7 @@ const searchData = await searchRes.json();
 
 // 2. Context banana
 const context = (searchData.organic || [])
+ console.log("SEARCH DATA:", JSON.stringify(searchData, null, 2));
   .slice(0, 5)
   .map(x => `${x.title}: ${x.snippet}`)
   .join("\n");
