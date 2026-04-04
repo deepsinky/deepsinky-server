@@ -57,7 +57,7 @@ const response = await fetch(
     },
     body: JSON.stringify({
       model: "llama-3.1-8b-instant",
-      temperature: 0.3,
+      temperature: 0.5,
       
 messages: [
   {
