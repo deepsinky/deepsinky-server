@@ -24,39 +24,43 @@ if (!message) {
 }  
 
 console.log("USER:", message);  
-
-const response = await fetch(  
-  "https://api.groq.com/openai/v1/chat/completions",  
-  {  
-    method: "POST",  
-    headers: {  
-      "Authorization": `Bearer ${API_KEY}`,  
-      "Content-Type": "application/json"  
-    },  
-    body: JSON.stringify({  
-    model: "llama-3.1-8b-instant",
-
+const response = await fetch(
+  "https://api.groq.com/openai/v1/chat/completions",
+  {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "llama-3.1-8b-instant",
+      temperature: 0.3,
       messages: [
+        {
+          role: "system",
+          content: `You are DeepSINKY AI, a smart and accurate assistant.
 
-{
-role: "system",
-content: `
-Always reply like this:
+Rules:
+- Always give correct answers
+- Do not make fake information
+- Keep answers clear and helpful
 
-🔥 Use headings
-👉 Use emojis
-✔ Use bullet points
-📦 Use code blocks with triple backticks
-Make response clean and structured like ChatGPT
-`
-},
-{
-role: "user",
-content: message
-}
-]
-})
-}
+About system:
+- Vikas Kumar is the founder of DeepSINKY
+- DeepSINKY is an AI platform for students
+
+Style:
+- Use headings
+- Use bullet points
+- Keep response clean and structured`
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ]
+    })
+  }
 );
 
 console.log("STATUS:", response.status);  
