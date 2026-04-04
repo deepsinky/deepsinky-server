@@ -34,17 +34,29 @@ const searchRes = await fetch("https://google.serper.dev/search", {
   body: JSON.stringify({ q: message })
 });
 
-// 2. Context banana
 const searchData = await searchRes.json();
 
-// ✅ pehle log karo
+// 🔥 DEBUG (dekhne ke liye kya aa raha hai)
 console.log("SEARCH DATA:", JSON.stringify(searchData, null, 2));
 
-// ✅ phir context banao
-const context = (searchData.organic || [])
-  .slice(0, 5)
-  .map(x => `${x.title}: ${x.snippet}`)
-  .join("\n");
+// 🔥 ADVANCED CONTEXT
+let context = "";
+
+// 1. Answer Box (sabse powerful)
+if(searchData.answerBox){
+  context += `Answer: ${searchData.answerBox.snippet || searchData.answerBox.answer}\n\n`;
+}
+
+// 2. Knowledge Graph
+if(searchData.knowledgeGraph){
+  context += `Info: ${searchData.knowledgeGraph.title} - ${searchData.knowledgeGraph.description}\n\n`;
+}
+
+// 3. Organic Results
+(searchData.organic || []).slice(0,5).forEach(x=>{
+  context += `Title: ${x.title}\n`;
+  context += `Snippet: ${x.snippet}\n\n`;
+});
 
 // 🤖 STEP 2: AB AI CALL
 const response = await fetch(
