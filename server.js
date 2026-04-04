@@ -79,15 +79,14 @@ Behavior Rules:
 Style:
 - Use clean formatting
 - Use headings and bullet points when helpful
-`
 
 Use this context to answer accurately:
 
-${context}`
-        },
-        {
-          role: "user",
-          content: message
+${context}
+`{
+  role: "user",
+  content: `User question: ${message}`
+        }
         }
       ]
     })
