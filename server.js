@@ -82,16 +82,16 @@ Style:
 
 Use this context to answer accurately:
 
-${context}
-`{
-  role: "user",
-  content: `User question: ${message}`
-        }
-        }
-      ]
-    })
-  }
-);
+
+${context}`
+      },
+      {
+        role: "user",
+        content: `User question: ${message}`
+      }
+    ]
+  })
+});
 console.log("STATUS:", response.status);  
 
 const data = await response.json();  
