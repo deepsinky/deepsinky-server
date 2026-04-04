@@ -19,11 +19,30 @@ app.post("/chat", async (req, res) => {
 try {
 const message = req.body.message;
 
-if (!message) {  
-  return res.json({ reply: "No message ❌" });  
-}  
+if (!message) {
+  return res.json({ reply: "No message ❌" });
+}
 
-console.log("USER:", message);  
+console.log("USER:", message);
+
+// 🔍 STEP 1: SEARCH ADD YAHAN
+const searchRes = await fetch("https://google.serper.dev/search", {
+  method: "POST",
+  headers: {
+    "X-API-KEY": "YOUR_KEY",
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ q: message })
+});
+
+const searchData = await searchRes.json();
+
+const context = searchData.organic
+  ?.slice(0,3)
+  ?.map(x => x.snippet)
+  ?.join("\n") || "";
+
+// 🤖 STEP 2: AB AI CALL
 const response = await fetch(
   "https://api.groq.com/openai/v1/chat/completions",
   {
@@ -38,21 +57,11 @@ const response = await fetch(
       messages: [
         {
           role: "system",
-          content: `You are DeepSINKY AI, a smart and accurate assistant.
+          content: `You are DeepSINKY AI.
 
-Rules:
-- Always give correct answers
-- Do not make fake information
-- Keep answers clear and helpful
+Use this context to answer accurately:
 
-About system:
-- Vikas Kumar is the founder of DeepSINKY
-- DeepSINKY is an AI platform for students
-
-Style:
-- Use headings
-- Use bullet points
-- Keep response clean and structured`
+${context}`
         },
         {
           role: "user",
@@ -62,7 +71,6 @@ Style:
     })
   }
 );
-
 console.log("STATUS:", response.status);  
 
 const data = await response.json();  
