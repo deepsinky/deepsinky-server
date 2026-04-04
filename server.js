@@ -24,12 +24,11 @@ if (!message) {
 }
 
 console.log("USER:", message);
-
-// 🔍 STEP 1: SEARCH ADD YAHAN
+// 1. Google search
 const searchRes = await fetch("https://google.serper.dev/search", {
   method: "POST",
   headers: {
-    "X-API-KEY": "YOUR_KEY",
+    "X-API-KEY": process.env.SERPER_KEY,
     "Content-Type": "application/json"
   },
   body: JSON.stringify({ q: message })
@@ -37,10 +36,11 @@ const searchRes = await fetch("https://google.serper.dev/search", {
 
 const searchData = await searchRes.json();
 
-const context = searchData.organic
-  ?.slice(0,3)
-  ?.map(x => x.snippet)
-  ?.join("\n") || "";
+// 2. Context banana
+const context = (searchData.organic || [])
+  .slice(0, 5)
+  .map(x => `${x.title}: ${x.snippet}`)
+  .join("\n");
 
 // 🤖 STEP 2: AB AI CALL
 const response = await fetch(
