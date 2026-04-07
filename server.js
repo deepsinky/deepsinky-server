@@ -307,6 +307,29 @@ res.status(500).json({ reply: "Server error 😢" });
 }
 });
 
+
+// ================= IMAGE =================
+app.post("/image", async (req, res) => {
+  try {
+    const prompt = req.body.prompt;
+
+    if (!prompt) {
+      return res.json({ image: null });
+    }
+
+    const finalPrompt = prompt + ", ultra realistic, 4k, RAW photo, DSLR, cinematic lighting";
+
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}`;
+
+    res.json({ image: imageUrl });
+
+  } catch (err) {
+    console.error("IMAGE ERROR:", err);
+    res.json({ image: null });
+  }
+});
+
+
 // PORT
 const PORT = process.env.PORT || 3000;
 
