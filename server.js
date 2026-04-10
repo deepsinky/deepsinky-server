@@ -317,7 +317,14 @@ app.post("/image", async (req, res) => {
       return res.json({ image: null });
     }
 
-    const finalPrompt = prompt + ", ultra realistic, 4k, RAW photo, DSLR, cinematic lighting";
+    const finalPrompt = `
+${prompt},
+
+ultra realistic, 8k, RAW photo, DSLR, cinematic lighting,
+photorealistic, hyper detailed, skin texture, pores visible,
+sharp focus, professional photography, depth of field,
+real human face, natural lighting, realistic shadows
+`;
 
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}`;
 
