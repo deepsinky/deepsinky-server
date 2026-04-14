@@ -335,7 +335,49 @@ real human face, natural lighting, realistic shadows
     res.json({ image: null });
   }
 });
+// ================= USER SYSTEM =================
 
+import mongoose from "mongoose";
+
+const User = mongoose.model("User", {
+  email: String,
+  password: String
+});
+
+// SIGNUP
+app.post("/signup", async (req,res)=>{
+  const {email, password} = req.body;
+
+  if(!email || !password){
+    return res.json({msg:"Missing data"});
+  }
+
+  const existing = await User.findOne({email});
+  if(existing){
+    return res.json({msg:"User already exists"});
+  }
+
+  const user = new User({email, password});
+  await user.save();
+
+  res.json({msg:"Signup success"});
+});
+
+// LOGIN
+app.post("/login", async (req,res)=>{
+  const {email, password} = req.body;
+
+  const user = await User.findOne({email});
+  if(!user){
+    return res.json({msg:"User not found"});
+  }
+
+  if(user.password !== password){
+    return res.json({msg:"Wrong password"});
+  }
+
+  res.json({msg:"Login success", userId:user._id});
+});
 
 // PORT
 const PORT = process.env.PORT || 3000;
