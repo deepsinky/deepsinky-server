@@ -1,14 +1,26 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
+import mongoose from "mongoose";   // ✅ ADD
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = process.env.API_KEY;
+// ✅ MONGODB CONNECT
+mongoose.connect(process.env.MONGO_URI);
 
+mongoose.connection.on("connected", ()=>{
+  console.log("MongoDB Connected ✅");
+});
+
+mongoose.connection.on("error", (err)=>{
+  console.log("MongoDB Error ❌", err);
+});
+
+// ✅ API KEYS
+const API_KEY = process.env.API_KEY;
 // ROOT
 app.get("/", (req, res) => {
 res.send("DeepSINKY Server is running ✅");
@@ -337,7 +349,6 @@ real human face, natural lighting, realistic shadows
 });
 // ================= USER SYSTEM =================
 
-import mongoose from "mongoose";
 
 const User = mongoose.model("User", {
   email: String,
