@@ -89,7 +89,7 @@ if(searchData.knowledgeGraph){
       messages: [
         {
           role: "system",
-          content: `You are DeepSINKY AI.\n\n${context}`
+          content: `You are DeepSINKY.\n\n${context}`
         },
         {
           role: "user",
@@ -113,7 +113,8 @@ let reply = data.choices?.[0]?.message?.content || "⚠️ No reply";
 res.json({ reply });
   
   
-
+content: `You are DeepSINKY 
+Your goal is...`
 Your goal is not just to answer questions, but to deeply understand, analyze, and respond like a smart human expert.
 You MUST follow this thinking pipeline before answering:
 
