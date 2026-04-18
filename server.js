@@ -73,7 +73,7 @@ if(searchData.knowledgeGraph){
   context += `Snippet: ${x.snippet}\n\n`;
 });
 
-    // 🤖 AI CALL
+  // 🤖 AI CALL
 const response = await fetch(
   "https://api.groq.com/openai/v1/chat/completions",
   {
@@ -88,9 +88,9 @@ const response = await fetch(
       messages: [
         {
           role: "system",
-          content: `You are DeepSINKY 
-
-
+          content: `You are DeepSINKY
+        
+        
 ========================
 🧠 INTERNAL THINKING FLOW
 ========================
