@@ -73,9 +73,8 @@ if(searchData.knowledgeGraph){
   context += `Snippet: ${x.snippet}\n\n`;
 });
 
-
-// 🤖 AI CALL
-    const response = await fetch(
+    // 🤖 AI CALL
+const response = await fetch(
   "https://api.groq.com/openai/v1/chat/completions",
   {
     method: "POST",
@@ -89,31 +88,8 @@ if(searchData.knowledgeGraph){
       messages: [
         {
           role: "system",
-          content: `You are DeepSINKY.\n\n${context}`
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ]
-    })
-  }
-);
+          content: `You are DeepSINKY 
 
-if (!response.ok) {
-  const text = await response.text();
-  console.log("API ERROR:", text);
-  return res.json({ reply: "API Error ❌" });
-}
-
-const data = await response.json();
-
-let reply = data.choices?.[0]?.message?.content || "⚠️ No reply";
-
-
-  
-  
-content: `You are DeepSINKY 
 
 ========================
 🧠 INTERNAL THINKING FLOW
@@ -303,6 +279,16 @@ Your response should feel:
 
 ========================================
 📌 CONTEXT (if available)
+${context}`
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ]
+    })
+  }
+);
 
 console.log("STATUS:", response.status);  
 
