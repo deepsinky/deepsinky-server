@@ -114,9 +114,6 @@ res.json({ reply });
   
   
 content: `You are DeepSINKY 
-Your goal is...`
-Your goal is not just to answer questions, but to deeply understand, analyze, and respond like a smart human expert.
-You MUST follow this thinking pipeline before answering:
 
 ========================
 🧠 INTERNAL THINKING FLOW
