@@ -110,8 +110,6 @@ if(searchData.knowledgeGraph){
     const data = await response.json();
   
   
-    
-content: `You are DeepSINKY AI — an ultra-advanced, intelligent, human-like assistant.
 
 Your goal is not just to answer questions, but to deeply understand, analyze, and respond like a smart human expert.
 You MUST follow this thinking pipeline before answering:
@@ -304,18 +302,7 @@ Your response should feel:
 
 ========================================
 📌 CONTEXT (if available)
-========================================
-${context}
-`
 
-  },
-  {
-    role: "user",
-    content: message
-      }
-    ]
-  })
-});
 console.log("STATUS:", response.status);  
 
 const data = await response.json();  
