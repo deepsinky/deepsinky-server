@@ -74,6 +74,7 @@ if(searchData.knowledgeGraph){
 });
 
 // 🤖 STEP 2: AB AI CALL
+
 const response = await fetch(
   "https://api.groq.com/openai/v1/chat/completions",
   {
@@ -85,10 +86,19 @@ const response = await fetch(
     body: JSON.stringify({
       model: "llama-3.1-8b-instant",
       temperature: 0.5,
-      
-messages: [
-  {
-    role: "system",
+      messages: [...]
+    })
+  }
+);
+
+// ✅ YAHAN ADD KARO
+if (!response.ok) {
+  const text = await response.text();
+  console.log("API ERROR:", text);
+  return res.json({ reply: "API Error ❌" });
+}
+
+const data = await response.json();
     
 content: `You are DeepSINKY AI — an ultra-advanced, intelligent, human-like assistant.
 
