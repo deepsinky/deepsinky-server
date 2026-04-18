@@ -74,22 +74,24 @@ if(searchData.knowledgeGraph){
 });
 
   // 🤖 AI CALL
-const response = await fetch(
-  "https://api.groq.com/openai/v1/chat/completions",
-  {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${process.env.API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "llama-3.1-8b-instant",
-      temperature: 0.5,
-      messages: [
-        {
-          role: "system",
-          content: `You are DeepSINKY
-        
+let reply = "";
+
+try {
+  const response = await fetch(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        temperature: 0.5,
+        messages: [
+          {
+            role: "system",
+            content: `You are DeepSINKY
         
 ========================
 🧠 INTERNAL THINKING FLOW
