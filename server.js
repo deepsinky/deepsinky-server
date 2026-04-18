@@ -73,39 +73,43 @@ if(searchData.knowledgeGraph){
   context += `Snippet: ${x.snippet}\n\n`;
 });
 
-// 🤖 STEP 2: AB AI CALL
 
-const response = await fetch(
-  "https://api.groq.com/openai/v1/chat/completions",
-  {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "llama-3.1-8b-instant",
-      temperature: 0.5,
-      messages: [
-  {
-    role: "system",
-    content: `You are DeepSINKY AI...`
-  },
-  {
-    role: "user",
-    content: message
-  }
-]
-   
+// 🤖 AI CALL
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          temperature: 0.5,
+          messages: [
+            {
+              role: "system",
+              content: `You are DeepSINKY AI. Use given context to answer smartly.\n\n${context}`
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ]
+        })
+      }
+    );
 
-// ✅ YAHAN ADD KARO
-if (!response.ok) {
-  const text = await response.text();
-  console.log("API ERROR:", text);
-  return res.json({ reply: "API Error ❌" });
-}
+    // ❗ ERROR HANDLE (IMPORTANT)
+    if (!response.ok) {
+      const text = await response.text();
+      console.log("API ERROR:", text);
+      return res.json({ reply: "API Error ❌" });
+    }
 
-const data = await response.json();
+    const data = await response.json();
+  
+  
     
 content: `You are DeepSINKY AI — an ultra-advanced, intelligent, human-like assistant.
 
