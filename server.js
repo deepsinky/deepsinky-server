@@ -86,10 +86,17 @@ const response = await fetch(
     body: JSON.stringify({
       model: "llama-3.1-8b-instant",
       temperature: 0.5,
-      messages: [...]
-    })
+      messages: [
+  {
+    role: "system",
+    content: `You are DeepSINKY AI...`
+  },
+  {
+    role: "user",
+    content: message
   }
-);
+]
+   
 
 // ✅ YAHAN ADD KARO
 if (!response.ok) {
