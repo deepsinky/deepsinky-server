@@ -110,7 +110,7 @@ const data = await response.json();
 
 let reply = data.choices?.[0]?.message?.content || "⚠️ No reply";
 
-res.json({ reply });
+
   
   
 content: `You are DeepSINKY 
