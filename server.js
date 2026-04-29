@@ -7,164 +7,154 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // ================= ROOT =================
+
 app.get("/", (req, res) => {
-res.send("DeepSINKY Server Running ✅");
+  res.send("DeepSINKY Server Running");
 });
+
 
 // ================= CHAT =================
+
 app.post("/chat", async (req, res) => {
+  try {
+    const message = req.body.message;
 
-try {
+    if (!message) {
+      return res.json({
+        reply: "No message received"
+      });
+    }
 
-const message = req.body.message;
+    console.log("USER:", message);
 
-if (!message) {
-return res.json({
-reply:"No message received ❌"
-});
-}
+    let context = "";
 
-console.log("USER:", message);
+    // ---------- Search Context ----------
+    try {
+      const searchRes = await fetch(
+        "https://google.serper.dev/search",
+        {
+          method: "POST",
+          headers: {
+            "X-API-KEY": process.env.SERPER_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            q: message
+          })
+        }
+      );
 
+      const searchData = await searchRes.json();
 
-// ========= GOOGLE SEARCH CONTEXT =========
-let context = "";
+      console.log("Search loaded");
 
-try {
+      if (searchData.answerBox) {
+        context += `Answer: ${
+          searchData.answerBox.answer ||
+          searchData.answerBox.snippet ||
+          ""
+        }\n\n`;
+      }
 
-const searchRes = await fetch(
-"https://google.serper.dev/search",
-{
-method:"POST",
-headers:{
-"X-API-KEY": process.env.SERPER_KEY,
-"Content-Type":"application/json"
-},
-body: JSON.stringify({
-q: message
-})
-}
-);
+      if (searchData.knowledgeGraph) {
+        context += `Info: ${
+          searchData.knowledgeGraph.title || ""
+        } - ${
+          searchData.knowledgeGraph.description || ""
+        }\n\n`;
+      }
 
-const searchData = await searchRes.json();
-
-console.log("Search OK");
-
-// Answer Box
-if(searchData.answerBox){
-context +=
-`Answer: ${
-searchData.answerBox.answer ||
-searchData.answerBox.snippet || ""
-}\n\n`;
-}
-
-// Knowledge Graph
-if(searchData.knowledgeGraph){
-context +=
-`Info: ${
-searchData.knowledgeGraph.title || ""
-} - ${
-searchData.knowledgeGraph.description || ""
-}\n\n`;
-}
-
-// Organic results
-(searchData.organic || [])
-.slice(0,5)
-.forEach(item=>{
-context +=
+      (searchData.organic || [])
+        .slice(0, 5)
+        .forEach(item => {
+          context +=
 `Title: ${item.title}
 Snippet: ${item.snippet}
 
 `;
-});
+        });
 
-} catch(searchErr){
-console.log("Search skipped");
-}
+    } catch (error) {
+      console.log("Search skipped");
+    }
 
 
-// ========= GROQ AI =========
-const response = await fetch(
-"https://api.groq.com/openai/v1/chat/completions",
-{
-method:"POST",
-headers:{
-Authorization: `Bearer ${process.env.API_KEY}`,
-"Content-Type":"application/json"
-},
-body: JSON.stringify({
-model:"llama-3.1-8b-instant",
-temperature:0.5,
-messages:[
-{
-role:"system",
-content:`
+    // ---------- Groq ----------
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          temperature: 0.5,
+          messages: [
+            {
+              role: "system",
+              content: `
 You are DeepSINKY AI.
 
 Rules:
-- Give smart accurate responses
+- Give accurate answers
 - Fix typos automatically
 - Understand user intent
-- Use provided search context if available
-- Reply clearly and helpfully
-- Avoid boring long answers
+- Use context if available
+- Respond clearly
+- Avoid unnecessary verbosity
 
 Context:
 ${context}
 `
-},
-{
-role:"user",
-content:message
-}
-]
-})
-}
-);
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ]
+        })
+      }
+    );
 
-console.log("Groq Status:",response.status);
+    console.log("Groq Status:", response.status);
 
-const data = await response.json();
+    const data = await response.json();
 
-console.log(
-JSON.stringify(data,null,2)
-);
+    let reply =
+      data?.choices?.[0]?.message?.content ||
+      "Blank response";
 
-let reply =
-data?.choices?.[0]?.message?.content ||
-"AI blank response ⚠️";
+    res.json({ reply });
 
-res.json({reply});
+  } catch (err) {
+    console.error("Chat Error:", err);
 
-}
-
-catch(err){
-console.error("Chat Error:",err);
-res.status(500).json({
-reply:"Server error 😢"
-});
-}
-
+    res.status(500).json({
+      reply: "Server error"
+    });
+  }
 });
 
 
 // ================= IMAGE =================
-app.post("/image",(req,res)=>{
 
-try{
+app.post("/image", (req, res) => {
+  try {
 
-const prompt=req.body.prompt;
+    const prompt = req.body.prompt;
 
-if(!prompt){
-return res.json({
-image:null
-});
-}
+    if (!prompt) {
+      return res.json({
+        image: null
+      });
+    }
 
-const finalPrompt=`
+    const finalPrompt = `
 ${prompt},
 ultra realistic,
 8k,
@@ -174,33 +164,29 @@ hyper detailed,
 sharp focus
 `;
 
-const imageUrl=
-`https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}`;
+    const imageUrl =
+      `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}`;
 
-res.json({
-image:imageUrl
-});
+    res.json({
+      image: imageUrl
+    });
 
-}
+  } catch (err) {
 
-catch(err){
+    console.error("Image Error:", err);
 
-console.error(err);
+    res.json({
+      image: null
+    });
 
-res.json({
-image:null
-});
-
-}
-
+  }
 });
 
 
 // ================= PORT =================
-const PORT=process.env.PORT || 3000;
 
-app.listen(PORT,"0.0.0.0",()=>{
-console.log(
-"DeepSINKY running on port "+PORT
-);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
