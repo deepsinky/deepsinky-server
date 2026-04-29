@@ -1,7 +1,8 @@
-import express from "express";
+
+
 import cors from "cors";
 import fetch from "node-fetch";
-
+const detectIntent = require("./engine/intentRouter");
 const app = express();
 
 app.use(cors());
@@ -28,6 +29,9 @@ app.post("/chat", async (req, res) => {
     }
 
     console.log("USER:", message);
+    const intent = detectIntent(message);
+
+console.log("Intent:", intent);
 
     let context = "";
 
