@@ -3,6 +3,10 @@
 import cors from "cors";
 import fetch from "node-fetch";
 const detectIntent = require("./engine/intentRouter");
+const studyPrompt = require("./studyPrompt");
+const plannerPrompt = require("./plannerPrompt");
+const codingPrompt = require("./codingPrompt");
+const generalPrompt = require("./generalPrompt");
 const app = express();
 
 app.use(cors());
@@ -32,6 +36,23 @@ app.post("/chat", async (req, res) => {
     const intent = detectIntent(message);
 
 console.log("Intent:", intent);
+    let systemPrompt;
+
+if(intent==="study"){
+systemPrompt=studyPrompt;
+}
+
+else if(intent==="planner"){
+systemPrompt=plannerPrompt;
+}
+
+else if(intent==="coding"){
+systemPrompt=codingPrompt;
+}
+
+else{
+systemPrompt=generalPrompt;
+}
 
     let context = "";
 
