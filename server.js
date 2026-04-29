@@ -1,3 +1,10 @@
+process.on("uncaughtException",(err)=>{
+ console.error("UNCAUGHT:",err);
+});
+
+process.on("unhandledRejection",(err)=>{
+ console.error("REJECTION:",err);
+});
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
