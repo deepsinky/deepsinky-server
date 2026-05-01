@@ -1,7 +1,14 @@
 function detectIntent(query){
 
 query = query.toLowerCase();
-
+if(
+query.includes("app") ||
+query.includes("website") ||
+query.includes("project") ||
+query.includes("create app")
+){
+return "appbuilder";
+}
 if(
 query.includes("plan") ||
 query.includes("ghante") ||
