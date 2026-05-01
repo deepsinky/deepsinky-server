@@ -1,5 +1,5 @@
 function promptBuilder(intent, message){
-
+const mode = modeController(intent);
 let base = "";
 
 if(intent === "study"){
@@ -69,6 +69,8 @@ Answer clearly and correctly.
 
 return `
 ${base}
+Style: ${mode.style}
+Depth: ${mode.depth}
 
 User Query:
 ${message}
