@@ -5,9 +5,9 @@ import fetch from "node-fetch";
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const GROQ_API_URL =
-  "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_MODEL = "llama-3.1-8b-instant";
+const NVIDIA_API_URL =
+  "https://integrate.api.nvidia.com/v1/chat/completions";
+const NVIDIA_MODEL = "nvidia/nemotron-3-ultra-550b-a55b";
 
 app.use(cors());
 app.use(express.json());
