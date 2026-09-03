@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 
 // ================= MODULES =================
 
-const detectIntent = require("./engine/intentRouter");
+import detectIntent from "./engine/intentRouter.js";
 const studyPrompt = require("./studyPrompt");
 const plannerPrompt = require("./plannerPrompt");
 const codingPrompt = require("./codingPrompt");
