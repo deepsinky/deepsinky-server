@@ -1,13 +1,12 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
-
 import detectIntent from "./engine/intentRouter.js";
 import studyPrompt from "./studyPrompt.js";
 import plannerPrompt from "./plannerPrompt.js";
 import codingPrompt from "./codingPrompt.js";
 import generalPrompt from "./generalPrompt.js";
-
+ 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
