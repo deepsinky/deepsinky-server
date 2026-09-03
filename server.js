@@ -1,19 +1,14 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
-import { createRequire } from "module";
-
-const require = createRequire(import.meta.url);
-
-// ================= MODULES =================
 
 import detectIntent from "./engine/intentRouter.js";
-const studyPrompt = require("./studyPrompt");
-const plannerPrompt = require("./plannerPrompt");
-const codingPrompt = require("./codingPrompt");
-const generalPrompt = require("./generalPrompt");
+import studyPrompt from "./studyPrompt.js";
+import plannerPrompt from "./plannerPrompt.js";
+import codingPrompt from "./codingPrompt.js";
+import generalPrompt from "./generalPrompt.js";
 
-// ================= CONFIG =================
+const app = express();
 
 const PORT = process.env.PORT || 3000;
 
@@ -22,9 +17,8 @@ const GROQ_API_URL =
 
 const GROQ_MODEL = "llama-3.1-8b-instant";
 
-// ================= APP =================
+// ================= CONFIG =================
 
-const app = express();
 
 app.use(cors());
 app.use(express.json());
