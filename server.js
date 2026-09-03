@@ -546,24 +546,27 @@ ${context}
       }
     );
 
-    console.log("Groq Status:", response.status);
-
     const data = await response.json();
 
-    let reply =
-      data?.choices?.[0]?.message?.content ||
-      "Blank response";
+console.log("GROQ RESPONSE:", JSON.stringify(data, null, 2));
 
-    res.json({ reply });
+if (!response.ok) {
+  return res.status(response.status).json({
+    reply: "Groq API Error",
+    error: data
+  });
+}
 
-  } catch (err) {
-    console.error("Chat Error:", err);
+const reply = data?.choices?.[0]?.message?.content;
 
-    res.status(500).json({
-      reply: "Server error"
-    });
-  }
-});
+if (!reply) {
+  console.log("EMPTY GROQ REPLY");
+  return res.json({
+    reply: "Groq ne koi text response nahi diya."
+  });
+}
+
+res.json({ reply });
 
 
 // ================= IMAGE =================
