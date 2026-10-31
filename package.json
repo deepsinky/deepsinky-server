@@ -1,0 +1,19 @@
+{
+  "name": "deepsinky-server-1",
+  "version": "1.0.0",
+  "description": "AI server",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "node-fetch": "^3.3.2",
+    "mongoose": "^8.9.5"
+  }
+}
